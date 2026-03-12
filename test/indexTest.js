@@ -65,4 +65,9 @@ describe('Basketball Stats', function () {
       expect(bigShoeRebounds()).to.equal(12);
     });
   });
+  describe('doesLongestNameStealATon', function () {
+    it('should return true if the player with the longest name had the most steals', function () {
+      expect(doesLongestNameStealATon()).to.equal(true);
+    });
+  })
 });

@@ -113,4 +113,93 @@ function gameObject() {
             },
         },
     };
+
+}
+function numPointsScored(PName){
+    let pointScores = gameObject().home.players[PName] || gameObject().away.players[PName];
+    return pointScores.points;
+}   
+function shoeSize(PName){
+    let ShoeSizes = gameObject().home.players[PName] || gameObject().away.players[PName];
+    return ShoeSizes.shoe;
+}
+function teamColors(TName){
+    let team = gameObject().home.teamName === TName ? gameObject().home : gameObject().away;
+    return team.colors;
+}
+function teamNames(){
+    return [gameObject().home.teamName, gameObject().away.teamName];
+}
+function playerNumbers(TName){
+    let team = gameObject().home.teamName === TName ? gameObject().home : gameObject().away;
+    return Object.values(team.players).map(player => player.number);
+}
+function playerStats(PName){
+    PName = gameObject().home.players[PName] || gameObject().away.players[PName];
+    return PName;
+}
+function bigShoeRebounds(){
+    let maxShoeSize = 0;
+    let maxRebounds = 0;
+    for (let player in gameObject().home.players) {
+        if (gameObject().home.players[player].shoe > maxShoeSize) {
+            maxShoeSize = gameObject().home.players[player].shoe;
+            maxRebounds = gameObject().home.players[player].rebounds;
+        }
+    }
+    for (let player in gameObject().away.players) {
+        if (gameObject().away.players[player].shoe > maxShoeSize) {
+            maxShoeSize = gameObject().away.players[player].shoe;
+            maxRebounds = gameObject().away.players[player].rebounds;
+        }
+    }
+    return maxRebounds;
+}
+function doesLongestNameStealATon(){
+    //this one was a little tougher to setup compared to the rest.
+    //Known: longest names are Brendan Hayword and Bismack Biyombo. 
+    //Known: Brendan has 22 steals and Bismack has 7 steals.
+    //Known: longest name length is 15 characters.
+    //Known: output default should be True, -
+    //if the values are changed in the playerlist it will output false and fail the test.
+    //Find longest Names
+    let longestNameLength = 0;
+    let longestNames = [];
+    for (let player in gameObject().home.players) {
+        if (player.length > longestNameLength) {
+            longestNameLength = player.length;
+            longestNames = [player];
+        } else if (player.length === longestNameLength) {
+            longestNames.push(player);
+        }
+    }
+    for (let player in gameObject().away.players) {
+        if (player.length > longestNameLength) {
+            longestNameLength = player.length;
+            longestNames = [player];
+        } else if (player.length === longestNameLength) {
+            longestNames.push(player);
+        }
+    }
+    //Find steals of longest names
+    let longestNameSteals = longestNames.map(name => {
+        let playerStats = gameObject().home.players[name] || gameObject().away.players[name];
+        return playerStats.steals;
+    });
+    //compare steals of longest names
+    let maxSteals = Math.max(...longestNameSteals);
+    for (let player in gameObject().home.players) {
+        let steals = gameObject().home.players[player].steals;
+        if (steals > maxSteals) {
+            return false;
+        }
+    }
+    for (let player in gameObject().away.players) {
+        let steals = gameObject().away.players[player].steals;
+        if (steals > maxSteals) {
+            return false;
+        }
+    }
+    //Only when longest name has max steals return true
+    return true;
 }
